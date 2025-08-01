@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h3>Bienvenido/a, {{ request.user.username }} 👋</h3>
+  <a href="{% url 'crear_avion' %}">Crear Avión</a>
+
+  <p>Nos alegra tenerte de vuelta.</p>
+  
+  
+</div>
+{% endblock %}

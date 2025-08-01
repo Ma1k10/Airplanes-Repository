@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <style>
+    input[type="text"], input[type="password"] {
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 800px;
+        
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    button {
+        padding: 10px;
+        background-color: #005f73;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0a9396;
+    }
+  </style>
+ <div class="container">
+    <center><h2>Registrarme</h2></center>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Crear Cuenta</button>
+    </form>
+</div>
+   
+     
+   
+  </form>
+{% endblock %}

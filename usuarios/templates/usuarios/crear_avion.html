@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    <label for="id_modelo">Modelo</label>
+    {{ form.modelo }}
+    {{ form.modelo.errors }}
+
+    <label for="id_capacidad">Capacidad</label>
+    {{ form.capacidad }}
+    {{ form.capacidad.errors }}
+
+    <label for="id_fabricante">Fabricante</label>
+    {{ form.fabricante }}
+    {{ form.fabricante.errors }}
+
+    <label for="id_anio_fabricacion">Año de Fabricación</label>
+    {{ form.anio_fabricacion }}
+    {{ form.anio_fabricacion.errors }}
+
+    <button type="submit">Guardar Avión</button>
+</form>
+{% endblock %}

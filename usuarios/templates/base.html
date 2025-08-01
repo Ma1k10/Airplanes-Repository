@@ -1,0 +1,64 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Gestión de Aerolíneas{% endblock %}</title>
+    <style>
+
+  nav {
+    background-color: #ff9900;
+    padding: 10px;
+  }
+
+  nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;              /* hace que los <li> se acomoden en fila */
+    justify-content: center;   /* centrado horizontal */
+    align-items: center;       /* centrado vertical */
+  }
+
+  nav li {
+    margin: 0 15px;            /* espacio entre botones */
+  }
+
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+
+  nav a:hover {
+    background-color: #595959;
+  }
+    </style>
+</head>
+<body>
+<nav>
+    <ul>
+          <li><a href="{% url 'home' %}">Inicio</a></li>
+          <li><a href="{% url 'lista_aviones' %}">Aviones</a></li>
+
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
+          {% else %}
+            <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
+            <li><a href="{% url 'register' %}">Registrarse</a></li>
+            <li><a href="{% url 'aviones' %}">Aviones</a></li>
+
+            {% endif %}
+    </ul>
+</nav>
+    
+
+<div style="padding: 20px;">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>
