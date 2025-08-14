@@ -1,0 +1,38 @@
+{% extends 'gestion_aerolinea/base.html' %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h1>Iniciar Sesión</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_username">Nombre de Usuario:</label>
+                <input type="text" name="username" id="id_username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="id_password">Contraseña:</label>
+                <input type="password" name="password" id="id_password" class="form-control" required>
+            </div>
+            {% if form.errors %}
+                <div class="error">
+                    {% for field in form %}
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endif %}
+            <button type="submit" class="btn">Iniciar Sesión</button>
+        </form>
+        <p>¿No tienes una cuenta? <a href="{% url 'signup' %}">Regístrate aquí</a>.</p>
+    </div>
+{% endblock %}

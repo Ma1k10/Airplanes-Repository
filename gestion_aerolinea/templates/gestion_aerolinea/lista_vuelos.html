@@ -1,0 +1,28 @@
+{% extends 'gestion_aerolinea/base.html' %}
+
+{% block title %}Vuelos Disponibles{% endblock %}
+
+{% block content %}
+    <h1>Vuelos Disponibles</h1>
+    {% if vuelos %}
+        <div class="card">
+            <ul>
+            {% for vuelo in vuelos %}
+                <li>
+                    <strong>{{ vuelo.origen }}</strong> a <strong>{{ vuelo.destino }}</strong>
+                    el {{ vuelo.fecha_salida|date:"d M Y" }} a las {{ vuelo.hora_salida|time:"H:i" }}
+                    (Duración: {{ vuelo.duracion_minutos }} minutos)
+                    <br>
+                    Avión: {{ vuelo.avion.modelo }} (Matrícula: {{ vuelo.avion.matricula }})
+                    <br>
+                    <a href="{% url 'detalle_vuelo' vuelo.id %}" class="btn">Ver Detalles y Reservar</a>
+                    {# ADD THIS NEW BUTTON #}
+                    <a href="{% url 'detalle_asientos_vuelo' vuelo.id %}" class="btn btn-secondary" style="margin-left: 10px;">Ver Asientos</a>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <p>No hay vuelos disponibles en este momento.</p>
+    {% endif %}
+{% endblock %}

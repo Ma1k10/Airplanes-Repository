@@ -1,0 +1,37 @@
+{% extends 'gestion_aerolinea/base.html' %}
+
+{% block title %}Vuelos para {{ avion.modelo }} ({{ avion.matricula }}){% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h1>Vuelos para Avión: {{ avion.modelo }} ({{ avion.matricula }})</h1>
+
+        {# ADD THIS BUTTON HERE #}
+        <p>
+            <a href="{% url 'programar_vuelo' avion.id %}" class="btn btn-primary">Programar Nuevo Vuelo para este Avión</a>
+        </p>
+        <hr> {# Optional: Add a separator #}
+
+
+        {% if vuelos %}
+            <ul>
+            {% for vuelo in vuelos %}
+                <li>
+                    <strong>{{ vuelo.origen }}</strong> a <strong>{{ vuelo.destino }}</strong>
+                    el {{ vuelo.fecha_salida|date:"d M Y" }} a las {{ vuelo.hora_salida|time:"H:i" }}
+                    (Duración: {{ vuelo.duracion_minutos }} minutos)
+                    <br>
+                    {# Link back to the standard flight detail page to reserve #}
+                    <a href="{% url 'detalle_vuelo' vuelo.id %}" class="btn">Ver Detalles y Reservar Asientos</a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay vuelos programados para este avión.</p>
+        {% endif %}
+
+        <div style="margin-top: 20px;">
+            <a href="{% url 'lista_aviones' %}" class="btn btn-secondary">Volver a Lista de Aviones</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'gestion_aerolinea/base.html' %}
+
+{% block title %}Confirmar Eliminación{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h1>Confirmar Eliminación de {{ tipo }}</h1>
+        <p>¿Estás seguro de que quieres eliminar este {{ tipo }}?</p>
+        <p><strong>{{ objeto }}</strong></p>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Sí, Eliminar</button>
+            <a href="{% url 'lista_aviones' %}" class="btn btn-secondary">Cancelar</a> {# Puedes ajustar la URL de cancelar según el tipo #}
+        </form>
+    </div>
+{% endblock %}

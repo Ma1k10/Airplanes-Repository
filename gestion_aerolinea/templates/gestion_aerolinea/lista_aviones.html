@@ -1,0 +1,43 @@
+{% extends 'gestion_aerolinea/base.html' %}
+
+{% block title %}Lista de Aviones{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h1>Lista de Aviones</h1>
+        <p><a href="{% url 'crear_avion' %}" class="btn">Agregar Nuevo Avión</a></p>
+
+        {% if aviones %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Modelo</th>
+                        <th>Matrícula</th>
+                        <th>Capacidad</th>
+                        <th>Acciones</th>
+                        <th>Ver Vuelos</th> {# New Column Header #}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for avion in aviones %}
+                        <tr>
+                            <td>{{ avion.modelo }}</td>
+                            <td>{{ avion.matricula }}</td>
+                            <td>{{ avion.capacidad }}</td> {# Corrected field name #}
+                            <td>
+                                <a href="{% url 'editar_avion' avion.pk %}" class="btn btn-sm">Editar</a>
+                                <a href="{% url 'eliminar_avion' avion.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+                            </td>
+                            <td>
+                                {# New Button to see flights for this specific airplane #}
+                                <a href="{% url 'vuelos_por_avion' avion.pk %}" class="btn btn-sm btn-info">Ver Vuelos</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay aviones registrados.</p>
+        {% endif %}
+    </div>
+{% endblock %}

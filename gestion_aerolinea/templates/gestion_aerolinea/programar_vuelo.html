@@ -1,0 +1,41 @@
+{% extends 'gestion_aerolinea/base.html' %}
+
+{% block title %}Programar Vuelo para {{ avion.modelo }}{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h1>Programar Nuevo Vuelo para {{ avion.modelo }} ({{ avion.matricula }})</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                        <ul class="errorlist" style="color: red;">
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            {% if form.non_field_errors %}
+                <div class="error">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <button type="submit" class="btn btn-primary">Programar Vuelo</button>
+        </form>
+
+        <div style="margin-top: 20px;">
+            <a href="{% url 'vuelos_por_avion' avion.id %}" class="btn btn-secondary">Volver a Vuelos del Avión</a>
+        </div>
+    </div>
+{% endblock %}

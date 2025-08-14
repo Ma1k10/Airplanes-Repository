@@ -1,0 +1,25 @@
+{% extends 'gestion_aerolinea/base.html' %}
+
+{% block title %}Reporte de Pasajeros por Vuelo{% endblock %}
+
+{% block content %}
+    <h1>Reporte de Pasajeros por Vuelo</h1>
+    {% if reporte_data %}
+        {% for data in reporte_data %}
+            <div class="card">
+                <h2>Vuelo: {{ data.vuelo.origen }} a {{ data.vuelo.destino }} ({{ data.vuelo.fecha_salida|date:"d M Y" }})</h2>
+                {% if data.pasajeros %}
+                    <ul>
+                        {% for pasajero in data.pasajeros %}
+                            <li>{{ pasajero.nombre }} {{ pasajero.apellido }} ({{ pasajero.documento }}) - {{ pasajero.email }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No hay pasajeros reservados para este vuelo.</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No hay datos de vuelos para generar el reporte.</p>
+    {% endif %}
+{% endblock %}

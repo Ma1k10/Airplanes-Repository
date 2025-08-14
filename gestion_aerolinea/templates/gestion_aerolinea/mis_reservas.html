@@ -1,0 +1,54 @@
+{% extends 'gestion_aerolinea/base.html' %}
+
+{% block title %}Mis Reservas{% endblock %}
+
+{% block content %}
+    <h1>Mis Reservas</h1>
+
+    {% if nuevas_reservas_info %}
+        <div class="message">
+            <h3>¡Reserva(s) Exitosa(s)!</h3>
+            <p>Tus nuevos boletos electrónicos:</p>
+            <ul>
+                {% for reserva in nuevas_reservas_info %}
+                    <li>
+                        Código de Boleto: <strong>{{ reserva.codigo_boleto }}</strong> -
+                        Vuelo: {{ reserva.asiento.vuelo.origen }} a {{ reserva.asiento.vuelo.destino }} ({{ reserva.asiento.vuelo.fecha_salida|date:"d M Y" }}) -
+                        Asiento: <strong>{{ reserva.asiento.numero_asiento }}</strong>
+                        <br>
+                        <a href="{% url 'generar_boleto_pdf' reserva.id %}" class="btn btn-sm">Descargar Boleto PDF</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <p>Por favor, guarda esta información.</p>
+        </div>
+    {% endif %}
+
+    {% if reservas %}
+        <h2>Todas tus Reservas</h2>
+        <ul>
+        {% for reserva in reservas %}
+            <li>
+                Vuelo: <strong>{{ reserva.asiento.vuelo.origen }}</strong> a <strong>{{ reserva.asiento.vuelo.destino }}</strong>
+                el {{ reserva.asiento.vuelo.fecha_salida|date:"d M Y" }} a las {{ reserva.asiento.vuelo.hora_salida|time:"H:i" }}
+                <br>
+                Asiento: <strong>{{ reserva.asiento.numero_asiento }}</strong>
+                <br>
+                Estado: {{ reserva.get_estado_display }}
+                <br>
+                Código de Boleto: {{ reserva.codigo_boleto|default:"N/A" }}
+                <br>
+                Fecha de Reserva: {{ reserva.fecha_reserva|date:"d M Y H:i" }}
+                <br>
+                <a href="{% url 'generar_boleto_pdf' reserva.id %}" class="btn btn-sm">Descargar Boleto PDF</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tienes reservas realizadas.</p>
+    {% endif %}
+
+    <div style="margin-top: 20px;">
+        <a href="{% url 'lista_vuelos' %}" class="btn btn-primary">Hacer una Nueva Reserva</a> {# <-- ADD THIS BUTTON #}
+    </div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'gestion_aerolinea/base.html' %}
+
+{% block title %}Asientos del Vuelo{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h1>Asientos para el Vuelo: {{ vuelo.origen }} a {{ vuelo.destino }}</h1>
+        <p><strong>Fecha:</strong> {{ vuelo.fecha_salida|date:"d M Y" }}</p>
+        <p><strong>Avión:</strong> {{ vuelo.avion.modelo }} (Matrícula: {{ vuelo.avion.matricula }})</p>
+        <p><strong>Capacidad del Avión:</strong> {{ vuelo.avion.capacidad }} asientos</p>
+
+        <h2>Lista de Asientos</h2>
+        {% if asientos %}
+            <div class="asientos-grid"> {# Using a grid layout for seats #}
+                {% for asiento in asientos %}
+                    <div class="asiento-item {% if not asiento.esta_disponible %}asiento-ocupado{% else %}asiento-disponible{% endif %}">
+                        Asiento: <strong>{{ asiento.numero_asiento }}</strong>
+                        <br>
+                        Estado: {% if asiento.esta_disponible %}Disponible{% else %}Ocupado{% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No se han configurado asientos para este vuelo.</p>
+        {% endif %}
+
+        <div style="margin-top: 20px;">
+            <a href="{% url 'lista_vuelos' %}" class="btn btn-secondary">Volver a Vuelos</a>
+            <a href="{% url 'detalle_vuelo' vuelo.id %}" class="btn btn-primary" style="margin-left: 10px;">Ir a Reservar Asientos</a>
+        </div>
+    </div>
+
+    <style>
+        .asientos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Adjust column width as needed */
+            gap: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f5f5f5;
+        }
+        .asiento-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            background-color: #fff;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+        .asiento-disponible {
+            background-color: #d4edda; /* Light green */
+            border-color: #28a745;
+            color: #155724;
+        }
+        .asiento-ocupado {
+            background-color: #f8d7da; /* Light red */
+            border-color: #dc3545;
+            color: #721c24;
+        }
+    </style>
+{% endblock %}

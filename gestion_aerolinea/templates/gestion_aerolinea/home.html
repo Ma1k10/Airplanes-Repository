@@ -1,0 +1,9 @@
+{% extends 'gestion_aerolinea/base.html' %}
+
+{% block title %}Inicio - Aerolínea XYZ{% endblock %}
+
+{% block content %}
+    <h1>Bienvenido al Sistema de Gestión de Aerolínea</h1>
+    <p>Explora nuestros vuelos disponibles o gestiona tus reservas.</p>
+    <p><a href="{% url 'lista_vuelos' %}" class="btn">Ver Vuelos Disponibles</a></p>
+{% endblock %}
