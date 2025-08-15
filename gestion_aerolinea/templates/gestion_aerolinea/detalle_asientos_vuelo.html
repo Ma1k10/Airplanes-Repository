@@ -7,7 +7,7 @@
         <h1>Asientos para el Vuelo: {{ vuelo.origen }} a {{ vuelo.destino }}</h1>
         <p><strong>Fecha:</strong> {{ vuelo.fecha_salida|date:"d M Y" }}</p>
         <p><strong>Avión:</strong> {{ vuelo.avion.modelo }} (Matrícula: {{ vuelo.avion.matricula }})</p>
-        <p><strong>Capacidad del Avión:</strong> {{ vuelo.avion.capacidad }} asientos</p>
+        <p><strong>Capacidad del Avión:</strong> {{ vuelo.avion.capacidad_asientos }} asientos</p>
 
         <h2>Lista de Asientos</h2>
         {% if asientos %}

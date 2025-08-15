@@ -9,7 +9,7 @@
         <p><strong>Hora de Salida:</strong> {{ vuelo.hora_salida|time:"H:i" }}</p>
         <p><strong>Duración:</strong> {{ vuelo.duracion_minutos }} minutos</p>
         <p><strong>Avión:</strong> {{ vuelo.avion.modelo }} (Matrícula: {{ vuelo.avion.matricula }})</p>
-        <p><strong>Asientos Totales:</strong> {{ vuelo.avion.capacidad }}</p>
+        <p><strong>Asientos Totales:</strong> {{ vuelo.avion.capacidad_asientos }}</p>
         <p><strong>Asientos Disponibles:</strong> {{ asientos_disponibles|length }}</p>
 
         <h2>Seleccionar Asientos para Reserva</h2>

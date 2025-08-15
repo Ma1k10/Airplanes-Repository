@@ -13,6 +13,8 @@ class Avion(models.Model):
 
     def __str__(self):
         return f"{self.modelo} ({self.matricula})"
+    
+    
 
 class Vuelo(models.Model):
     origen = models.CharField(max_length=100)
@@ -62,7 +64,7 @@ class Pasajero(models.Model):
     documento = models.CharField(max_length=20, unique=True)
     email = models.EmailField(unique=True)
     telefono = models.CharField(max_length=20, blank=True, null=True)
-
+    
     def __str__(self):
         return f"{self.nombre} {self.apellido} ({self.documento})"
 

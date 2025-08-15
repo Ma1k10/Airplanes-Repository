@@ -23,7 +23,7 @@
                         <tr>
                             <td>{{ avion.modelo }}</td>
                             <td>{{ avion.matricula }}</td>
-                            <td>{{ avion.capacidad }}</td> {# Corrected field name #}
+                            <td>{{ avion.capacidad_asientos }}</td> {# Corrected field name #}
                             <td>
                                 <a href="{% url 'editar_avion' avion.pk %}" class="btn btn-sm">Editar</a>
                                 <a href="{% url 'eliminar_avion' avion.pk %}" class="btn btn-sm btn-danger">Eliminar</a>

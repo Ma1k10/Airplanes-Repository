@@ -32,5 +32,7 @@ urlpatterns = [
 
     # NEW: URL to program a flight for a specific airplane
     path('aviones/<int:avion_id>/programar-vuelo/', views.programar_vuelo, name='programar_vuelo'),
-   
+    path('reserva/<int:reserva_id>/boleto-pdf/', views.generar_boleto_pdf, name='generar_boleto_pdf'),
+
+
 ]

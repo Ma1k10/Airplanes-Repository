@@ -8,24 +8,18 @@
     {% if nuevas_reservas_info %}
         <div class="message">
             <h3>¡Reserva(s) Exitosa(s)!</h3>
-            <p>Tus nuevos boletos electrónicos:</p>
-            <ul>
-                {% for reserva in nuevas_reservas_info %}
-                    <li>
-                        Código de Boleto: <strong>{{ reserva.codigo_boleto }}</strong> -
-                        Vuelo: {{ reserva.asiento.vuelo.origen }} a {{ reserva.asiento.vuelo.destino }} ({{ reserva.asiento.vuelo.fecha_salida|date:"d M Y" }}) -
-                        Asiento: <strong>{{ reserva.asiento.numero_asiento }}</strong>
-                        <br>
-                        <a href="{% url 'generar_boleto_pdf' reserva.id %}" class="btn btn-sm">Descargar Boleto PDF</a>
-                    </li>
-                {% endfor %}
-            </ul>
-            <p>Por favor, guarda esta información.</p>
+            <p>Tus nuevos boletos electrónicos han sido generados.</p>
+            {# Optionally, remove the detailed list here if you want to keep it minimal #}
+            {# For example, you might just say "Revisa tus reservas a continuación." #}
         </div>
     {% endif %}
 
+    <div class="card" style="margin-bottom: 20px;">
+        <h2>Total de Reservas Realizadas: {{ reservas|length }}</h2>
+    </div>
+
     {% if reservas %}
-        <h2>Todas tus Reservas</h2>
+        <h2>Historial de Vuelos Reservados</h2>
         <ul>
         {% for reserva in reservas %}
             <li>
@@ -34,11 +28,7 @@
                 <br>
                 Asiento: <strong>{{ reserva.asiento.numero_asiento }}</strong>
                 <br>
-                Estado: {{ reserva.get_estado_display }}
-                <br>
                 Código de Boleto: {{ reserva.codigo_boleto|default:"N/A" }}
-                <br>
-                Fecha de Reserva: {{ reserva.fecha_reserva|date:"d M Y H:i" }}
                 <br>
                 <a href="{% url 'generar_boleto_pdf' reserva.id %}" class="btn btn-sm">Descargar Boleto PDF</a>
             </li>
@@ -49,6 +39,6 @@
     {% endif %}
 
     <div style="margin-top: 20px;">
-        <a href="{% url 'lista_vuelos' %}" class="btn btn-primary">Hacer una Nueva Reserva</a> {# <-- ADD THIS BUTTON #}
+        <a href="{% url 'lista_vuelos' %}" class="btn btn-primary">Hacer una Nueva Reserva</a>
     </div>
 {% endblock %}

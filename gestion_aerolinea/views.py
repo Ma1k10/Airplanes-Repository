@@ -9,6 +9,15 @@ from django.forms import ModelForm # Para formularios basados en modelos
 from django.contrib import messages
 from .forms import AvionForm # Importa el formulario de Aviones
 from django import forms # <-- ADD THIS LINE
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas # You likely have this
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import inch
+from reportlab.lib import colors # You likely have this
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer # <-- ADD/ENSURE THIS LINE
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle # <-- ADD/ENSURE THIS LINE
+from io import BytesIO
+
 
 def home(request):
     """
@@ -466,7 +475,7 @@ def programar_vuelo(request, avion_id):
                     vuelo.save()
 
                     # Now, create seats for the new flight based on the airplane's capacity
-                    for i in range(1, avion.capacidad + 1):
+                    for i in range(1, avion.capacidad_asientos + 1):
                         Asiento.objects.create(vuelo=vuelo, numero_asiento=f'A-{i}', esta_disponible=True)
                         # You might use more sophisticated seat numbering (e.g., 1A, 1B, 2A)
                         # For now, A-1, A-2, etc. is fine as a placeholder.
@@ -487,3 +496,74 @@ def programar_vuelo(request, avion_id):
         'form': form,
         'avion': avion,
     })
+@login_required # Only allow logged-in users to generate their tickets
+def generar_boleto_pdf(request, reserva_id):
+    reserva = get_object_or_404(Reserva, pk=reserva_id)
+
+    # Security check: Ensure the logged-in user owns this reservation
+    if reserva.pasajero.usuario != request.user:
+        messages.error(request, 'No tienes permiso para ver este boleto.')
+        return redirect('mis_reservas')
+
+    # Create a file-like buffer to receive PDF data.
+    buffer = BytesIO()
+
+    # Create the PDF object, using the buffer as its file.
+    doc = SimpleDocTemplate(buffer, pagesize=letter,
+                            rightMargin=inch, leftMargin=inch,
+                            topMargin=inch, bottomMargin=inch)
+    styles = getSampleStyleSheet()
+
+    # Define a custom style for the ticket details
+    ticket_style = ParagraphStyle(
+        'TicketDetail',
+        parent=styles['Normal'],
+        fontSize=12,
+        leading=16,
+        spaceAfter=6,
+    )
+
+    elements = []
+
+    # Title
+    elements.append(Paragraph("<b>AEROLÍNEA XYZ - Boleto Electrónico</b>", styles['h1']))
+    elements.append(Spacer(1, 0.2 * inch))
+
+    # Basic Info
+    elements.append(Paragraph(f"<b>Código de Boleto:</b> {reserva.codigo_boleto}", ticket_style))
+    elements.append(Paragraph(f"<b>Estado:</b> {reserva.estado}", ticket_style))
+    elements.append(Spacer(1, 0.1 * inch))
+
+    # Passenger Details
+    elements.append(Paragraph("<b>Datos del Pasajero:</b>", styles['h2']))
+    elements.append(Paragraph(f"<b>Nombre:</b> {reserva.pasajero.nombre} {reserva.pasajero.apellido}", ticket_style))
+    elements.append(Paragraph(f"<b>Documento:</b> {reserva.pasajero.documento}", ticket_style))
+    elements.append(Paragraph(f"<b>Email:</b> {reserva.pasajero.email}", ticket_style))
+    elements.append(Spacer(1, 0.2 * inch))
+
+    # Flight Details
+    elements.append(Paragraph("<b>Datos del Vuelo:</b>", styles['h2']))
+    elements.append(Paragraph(f"<b>Origen:</b> {reserva.asiento.vuelo.origen}", ticket_style))
+    elements.append(Paragraph(f"<b>Destino:</b> {reserva.asiento.vuelo.destino}", ticket_style))
+    elements.append(Paragraph(f"<b>Fecha de Salida:</b> {reserva.asiento.vuelo.fecha_salida.strftime('%d/%m/%Y')}", ticket_style))
+    elements.append(Paragraph(f"<b>Hora de Salida:</b> {reserva.asiento.vuelo.hora_salida.strftime('%H:%M')}", ticket_style))
+    elements.append(Paragraph(f"<b>Duración:</b> {reserva.asiento.vuelo.duracion_minutos} minutos", ticket_style))
+    elements.append(Paragraph(f"<b>Avión:</b> {reserva.asiento.vuelo.avion.modelo} (Matrícula: {reserva.asiento.vuelo.avion.matricula})", ticket_style))
+    elements.append(Paragraph(f"<b>Asiento Asignado:</b> {reserva.asiento.numero_asiento}", ticket_style))
+    elements.append(Spacer(1, 0.2 * inch))
+
+    # Footer
+    elements.append(Paragraph("<i>Gracias por volar con Aerolínea XYZ.</i>", styles['Italic']))
+
+    # Build the PDF
+    doc.build(elements)
+
+    # Get the value of the BytesIO buffer and make it an HTTP response.
+    pdf = buffer.getvalue()
+    buffer.close()
+
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="boleto_{reserva.codigo_boleto}.pdf"' # Forces download
+    # response['Content-Disposition'] = f'inline; filename="boleto_{reserva.codigo_boleto}.pdf"' # Displays in browser
+
+    return response
