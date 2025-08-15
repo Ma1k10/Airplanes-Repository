@@ -60,7 +60,7 @@ Este proyecto consiste en una **gestión de aerolínea** desarrollada con Django
 
 
 
-## Autor
+## Autores
 
 - [Ma1k10](https://github.com/Ma1k10)
 - [ElArnold10](https://github.com/ElArnold10)
